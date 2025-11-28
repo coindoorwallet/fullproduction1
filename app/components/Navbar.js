@@ -1,13 +1,21 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="border-b border-neutral-800 p-5 flex justify-between items-center">
-      <Link href="/" className="text-2xl font-bold">CoinDoor</Link>
-      <div className="flex gap-6">
-        <Link href="/markets" className="hover:opacity-80">Markets</Link>
-        <Link href="/news" className="hover:opacity-80">News</Link>
-        <Link href="/join" className="hover:opacity-80">Join</Link>
+    <nav className="border-b border-neutral-800 py-4">
+      <div className="container flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <img src="/logo.png" alt="CoinDoor" width="44" height="44" style={{borderRadius:8}}/>
+          <span className="text-xl font-bold">CoinDoor</span>
+        </Link>
+
+        <div className="flex items-center gap-6">
+          <Link href="/" className="header-link">Home</Link>
+          <Link href="/markets" className="header-link">Markets</Link>
+          <Link href="/news" className="header-link">News</Link>
+          <Link href="/about" className="header-link">About</Link>
+          <Link href="/educator-program" className="pill">Educator Program</Link>
+        </div>
       </div>
     </nav>
   );
