@@ -1,70 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Add or merge into app/globals.css */
 
-:root{
-  --bg:#000000;
-  --panel:#0b0b0b;
-  --muted:#9ca3af;
-  --accent:#52a447; /* your green */
-  --accent-foreground:#001f0a;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-html,body{
-  background: var(--bg);
-  color: #fff;
-  margin:0;
-  padding:0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-
-a { color: var(--accent); text-decoration: none; }
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-
-.header-link { color: rgba(255,255,255,0.85); }
-
+/* .card used for submenu background */
 .card {
-  background: var(--panel);
+  background: #0b0b0b;
   border: 1px solid rgba(255,255,255,0.03);
-  border-radius: 12px;
-  padding: 1rem;
+  border-radius: 8px;
+  padding: 0.5rem;
 }
-.small-muted { color: var(--muted); font-size: 0.95rem; }
+
+/* ensure nav text defaults to green - host color consistent */
+.header-link, nav a {
+  color: #52a447;
+}
+
+/* pill (if needed elsewhere) */
 .pill {
-  display:inline-block;
-  background: var(--accent);
-  color: var(--accent-foreground);
-  padding: 0.25rem 0.6rem;
+  background: #52a447;
+  color: #001f0a;
+  padding: 0.3rem 0.6rem;
   border-radius: 999px;
-  font-weight:600;
-  font-size:0.9rem;
-}
-/* Dropdown transitions */
-[role="menu"] {
-  transform-origin: top right;
-  transition: opacity 160ms ease, transform 160ms ease;
-  z-index: 50;
+  font-weight: 600;
 }
 
-/* Panel background variable used above */
-:root {
-  --panel: #0b0b0b;
-  --accent: #52a447;
-  --accent-foreground: #001f0a;
-}
+/* make submenu links clear */
+.card a { color: #ffffff; opacity: 0.9; }
 
-/* Improve link hover readability */
-.header-link {
-  color: rgba(255,255,255,0.9);
-  padding: 0 .125rem;
-}
+/* ensure submenu stays above */
+.group:hover .group-hover\:block { display: block; }
 
-.header-link:hover {
-  opacity: 0.95;
-}
-
-/* Mobile menu */
-@media (max-width: 767px) {
-  header .container { padding-left: 1rem; padding-right: 1rem; }
+/* small responsive tweak */
+@media (max-width: 768px) {
+  .container { padding: 0 0.75rem; }
 }
