@@ -1,110 +1,92 @@
 "use client";
-
-import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
-
-const menuItems = [
-  { name: "Home", href: "/" },
-  { 
-    name: "Markets", 
-    href: "/markets" 
-  },
-  {
-    name: "News",
-    submenu: [
-      { name: "Articles", href: "/news" },
-      { name: "Research", href: "/news/research" },
-      { name: "Social Media Commentary", href: "/news/social" },
-    ],
-  },
-  {
-    name: "Community",
-    submenu: [
-      { name: "Newsletter", href: "/community/newsletter" },
-      { name: "Podcast", href: "/community/podcast" },
-    ],
-  },
-  {
-    name: "Company",
-    submenu: [
-      { name: "About", href: "/company/about" },
-      { name: "Partners", href: "/company/partners" },
-      { name: "Become a Partner", href: "/company/become-partner" },
-      { name: "Join Our Team", href: "/company/careers" },
-      { name: "Contact Us", href: "/company/contact" },
-    ],
-  },
-  {
-    name: "Merchandise",
-    href: "/merch",
-  },
-];
+import Image from "next/image";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(null);
 
-  return (
-    <nav className="w-full bg-white shadow-md py-4 px-8">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+  const menuItems = [
+    { title: "Home", href: "/" },
+    { title: "Markets", href: "/markets" },
+    {
+      title: "News",
+      submenu: [
+        { title: "Articles", href: "/news/articles" },
+        { title: "Research", href: "/news/research" },
+        { title: "Social Media Commentary", href: "/news/social" },
+      ],
+    },
+    {
+      title: "Community",
+      submenu: [
+        { title: "Newsletter", href: "/community/newsletter" },
+        { title: "Podcast", href: "/community/podcast" },
+      ],
+    },
+    {
+      title: "Company",
+      submenu: [
+        { title: "About", href: "/company/about" },
+        { title: "Partners", href: "/company/partners" },
+        { title: "Become a Partner", href: "/company/become-partner" },
+        { title: "Join Our Team", href: "/company/jobs" },
+        { title: "Contact Us", href: "/company/contact" },
+      ],
+    },
+    { title: "Merchandise", href: "/merch" },
+    {
+      title: "Educator Program",
+      href: "/educators",
+      pill: true,
+    },
+  ];
 
-        {/* LEFT — LOGO */}
-        <Link href="/" className="flex items-center gap-2">
+  return (
+    <nav className="navbar">
+      <div className="nav-inner">
+
+        {/* LOGO */}
+        <a href="/" className="logo-container">
           <Image
             src="/logo.png"
+            width={90}
+            height={90}
             alt="CoinDoor Logo"
-            width={48}
-            height={48}
-            className="object-contain"
+            className="logo-img"
           />
-        </Link>
+        </a>
 
-        {/* RIGHT — NAVIGATION */}
-        <div className="flex items-center gap-10">
-
-          {menuItems.map((item, index) =>
-            item.submenu ? (
-              <div
-                key={index}
-                className="relative"
-                onMouseEnter={() => setOpenMenu(item.name)}
-                onMouseLeave={() => setOpenMenu(null)}
+        {/* MENU */}
+        <ul className="menu">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className="menu-item"
+              onMouseEnter={() => setOpenMenu(index)}
+              onMouseLeave={() => setOpenMenu(null)}
+            >
+              <a
+                href={item.href || "#"}
+                className={`menu-link ${item.pill ? "pill" : ""}`}
               >
-                <span className="text-[#52a447] font-semibold cursor-pointer">
-                  {item.name}
-                </span>
+                {item.title}
+              </a>
 
-                {openMenu === item.name && (
-                  <div className="absolute left-0 top-8 bg-white rounded-md shadow-lg py-2 w-56 z-50">
-                    {item.submenu.map((sub, idx) => (
-                      <Link
-                        key={idx}
-                        href={sub.href}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link key={index} href={item.href}>
-                <span className="text-[#52a447] font-semibold cursor-pointer">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          )}
+              {item.submenu && openMenu === index && (
+                <ul className="submenu">
+                  {item.submenu.map((sub, i) => (
+                    <li key={i}>
+                      <a href={sub.href} className="submenu-link">
+                        {sub.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
 
-          {/* EDUCATOR PROGRAM PILL */}
-          <Link
-            href="/educators"
-            className="bg-[#52a447] px-4 py-2 rounded-full text-white font-semibold hover:bg-green-700 transition"
-          >
-            Educator Program
-          </Link>
-        </div>
       </div>
     </nav>
   );
