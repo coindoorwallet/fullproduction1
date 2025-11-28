@@ -1,90 +1,104 @@
 "use client";
-
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Navbar() {
-  const [open, setOpen] = useState({ news:false, community:false, company:false });
+  const [openMenu, setOpenMenu] = useState(null);
 
-  function toggle(menu, val){
-    setOpen(prev => ({ ...prev, [menu]: val }));
-  }
+  const toggleMenu = (menu) => {
+    setOpenMenu(openMenu === menu ? null : menu);
+  };
 
   return (
-    <nav className="border-b border-neutral-800 py-4 bg-black">
-      <div className="container flex items-center justify-between">
-        {/* Logo only (no text) */}
-        <Link href="/">
-          <img src="/logo.png" alt="CoinDoor" width="56" height="56" style={{ borderRadius: 8 }} />
-        </Link>
+    <nav className="w-full bg-white shadow-md px-6 py-3 flex items-center justify-between relative z-50">
+      {/* LOGO */}
+      <Link href="/">
+        <Image
+          src="/logo.png"
+          alt="CoinDoor Logo"
+          width={42}
+          height={42}
+          className="cursor-pointer"
+        />
+      </Link>
 
-        <div className="flex items-center gap-6">
-          <Link href="/" className="header-link">Home</Link>
+      {/* NAV LINKS */}
+      <div className="flex gap-6 text-[16px] font-medium">
+        <Link href="/">Home</Link>
+        <Link href="/markets">Markets</Link>
 
-          <Link href="/markets" className="header-link">Markets</Link>
-
-          {/* News dropdown */}
-          <div
-            onMouseEnter={() => toggle("news", true)}
-            onMouseLeave={() => toggle("news", false)}
-            className="relative"
-          >
-            <button className="header-link">News</button>
-
-            <div
-              className={`absolute right-0 mt-2 w-48 bg-[var(--panel)] border border-neutral-800 rounded shadow-lg z-50 ${open.news ? "block" : "hidden"}`}
-              onMouseEnter={() => toggle("news", true)}
-              onMouseLeave={() => toggle("news", false)}
-            >
-              <Link href="/news/articles" className="block px-4 py-2 hover:bg-neutral-900">Articles</Link>
-              <Link href="/news/research" className="block px-4 py-2 hover:bg-neutral-900">Research</Link>
-              <Link href="/news/social" className="block px-4 py-2 hover:bg-neutral-900">Social Media Commentary</Link>
+        {/* NEWS */}
+        <div
+          className="relative"
+          onMouseEnter={() => toggleMenu("news")}
+          onMouseLeave={() => toggleMenu(null)}
+        >
+          <span className="cursor-pointer">News</span>
+          {openMenu === "news" && (
+            <div className="absolute top-full left-0 bg-white border shadow-md rounded-md w-48 py-2 flex flex-col">
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/news">
+                Articles
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/research">
+                Research
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/commentary">
+                Social Media Commentary
+              </Link>
             </div>
-          </div>
-
-          {/* Community dropdown */}
-          <div
-            onMouseEnter={() => toggle("community", true)}
-            onMouseLeave={() => toggle("community", false)}
-            className="relative"
-          >
-            <button className="header-link">Community</button>
-
-            <div
-              className={`absolute right-0 mt-2 w-40 bg-[var(--panel)] border border-neutral-800 rounded shadow-lg z-50 ${open.community ? "block" : "hidden"}`}
-              onMouseEnter={() => toggle("community", true)}
-              onMouseLeave={() => toggle("community", false)}
-            >
-              <Link href="/newsletter" className="block px-4 py-2 hover:bg-neutral-900">Newsletter</Link>
-              <Link href="/podcast" className="block px-4 py-2 hover:bg-neutral-900">Podcast</Link>
-            </div>
-          </div>
-
-          {/* Company dropdown */}
-          <div
-            onMouseEnter={() => toggle("company", true)}
-            onMouseLeave={() => toggle("company", false)}
-            className="relative"
-          >
-            <button className="header-link">Company</button>
-
-            <div
-              className={`absolute right-0 mt-2 w-56 bg-[var(--panel)] border border-neutral-800 rounded shadow-lg z-50 ${open.company ? "block" : "hidden"}`}
-              onMouseEnter={() => toggle("company", true)}
-              onMouseLeave={() => toggle("company", false)}
-            >
-              <Link href="/about" className="block px-4 py-2 hover:bg-neutral-900">About</Link>
-              <Link href="/partners" className="block px-4 py-2 hover:bg-neutral-900">Partners</Link>
-              <Link href="/partners/apply" className="block px-4 py-2 hover:bg-neutral-900">Become a Partner</Link>
-              <Link href="/careers" className="block px-4 py-2 hover:bg-neutral-900">Join Our Team</Link>
-              <Link href="/contact" className="block px-4 py-2 hover:bg-neutral-900">Contact Us</Link>
-            </div>
-          </div>
-
-          <Link href="/merchandise" className="header-link">Merchandise</Link>
-
-          <Link href="/educator-program" className="pill">Educator Program</Link>
+          )}
         </div>
+
+        {/* COMMUNITY */}
+        <div
+          className="relative"
+          onMouseEnter={() => toggleMenu("community")}
+          onMouseLeave={() => toggleMenu(null)}
+        >
+          <span className="cursor-pointer">Community</span>
+          {openMenu === "community" && (
+            <div className="absolute top-full left-0 bg-white border shadow-md rounded-md w-48 py-2 flex flex-col">
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/newsletter">
+                Newsletter
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/podcast">
+                Podcast
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* COMPANY */}
+        <div
+          className="relative"
+          onMouseEnter={() => toggleMenu("company")}
+          onMouseLeave={() => toggleMenu(null)}
+        >
+          <span className="cursor-pointer">Company</span>
+          {openMenu === "company" && (
+            <div className="absolute top-full left-0 bg-white border shadow-md rounded-md w-48 py-2 flex flex-col">
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/about">
+                About
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/partners">
+                Partners
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/become-partner">
+                Become a Partner
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/careers">
+                Join Our Team
+              </Link>
+              <Link className="px-4 py-2 hover:bg-gray-100" href="/contact">
+                Contact Us
+              </Link>
+            </div>
+          )}
+        </div>
+
+        <Link href="/merch">Merchandise</Link>
+        <Link href="/educator-program">Educator Program</Link>
       </div>
     </nav>
   );
