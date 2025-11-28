@@ -4,15 +4,15 @@ import Footer from "./components/Footer";
 
 export const metadata = {
   title: "CoinDoor",
-  description: "Your gateway to Web3",
+  description: "Your Web3 learning & market intelligence hub.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-black text-white">
         <Navbar />
-        {children}
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
