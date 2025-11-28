@@ -1,11 +1,11 @@
 async function getNews() {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/news`;
-
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/news`,
+      { cache: "no-store" }
+    );
 
     if (!res.ok) return [];
-
     const data = await res.json();
     return data.items || [];
   } catch (_) {
@@ -24,18 +24,29 @@ export default async function NewsPage() {
         <p className="text-neutral-400">No news available right now.</p>
       )}
 
-      <ul className="space-y-5">
+      <div className="space-y-6">
         {articles.map((item) => (
-          <li
+          <a
             key={item.id}
-            className="border border-neutral-800 p-4 rounded-lg hover:bg-neutral-900 transition"
+            href={item.url}
+            target="_blank"
+            className="block p-5 rounded-lg border border-neutral-800 bg-neutral-950 hover:bg-neutral-900 transition"
           >
-            <a target="_blank" href={item.url} className="font-semibold text-blue-400">
-              {item.title}
-            </a>
-          </li>
+            <p className="text-sm text-neutral-400 mb-2">
+              {item.source?.title || "Unknown source"} •{" "}
+              {new Date(item.published_at).toLocaleString()}
+            </p>
+
+            <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
+
+            {item.domain && (
+              <span className="text-xs px-3 py-1 rounded-full bg-neutral-800 text-neutral-300">
+                {item.domain}
+              </span>
+            )}
+          </a>
         ))}
-      </ul>
+      </div>
     </main>
   );
 }
