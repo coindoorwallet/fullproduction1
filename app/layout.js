@@ -1,19 +1,17 @@
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
-  title: "CoinDoor — Real-time crypto charts & trusted Web3 news",
-  description: "CoinDoor — live charts, curated Web3 news and educator program signups.",
+  title: "CoinDoor",
+  description: "Your doorway to crypto education, markets, and insights.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
+      <body className="bg-[#0a0a0a] text-white">
         <Navbar />
-        <main className="container min-h-screen py-8">{children}</main>
-        <Footer />
+        <main>{children}</main>
       </body>
     </html>
   );
