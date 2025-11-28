@@ -4,13 +4,13 @@ import Ticker from "./components/Ticker";
 
 export const metadata = {
   title: "CoinDoor",
-  description: "Your gateway to the digital economy",
+  description: "Your crypto homepage.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-[#0c0f0d] text-white">
+      <body>
         <Navbar />
         <Ticker />
         <main>{children}</main>
