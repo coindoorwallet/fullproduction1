@@ -1,40 +1,109 @@
-/* Add or merge into app/globals.css */
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-.container {
-  max-width: 1200px;
+/* APP BASE */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0d0d0d;
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  background-color: #0d0d0d;
+  border-bottom: 1px solid #1e1e1e;
+  padding: 0.6rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
-/* .card used for submenu background */
-.card {
-  background: #0b0b0b;
-  border: 1px solid rgba(255,255,255,0.03);
-  border-radius: 8px;
-  padding: 0.5rem;
+/* LOGO */
+.logo-container {
+  display: flex;
+  align-items: center;
 }
 
-/* ensure nav text defaults to green - host color consistent */
-.header-link, nav a {
+.logo-img {
+  height: 60px;
+  width: auto;
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.menu-item {
+  position: relative;
+}
+
+.menu-link {
+  text-decoration: none;
   color: #52a447;
+  font-weight: 500;
+  transition: 0.2s ease;
+  font-size: 1.05rem;
 }
 
-/* pill (if needed elsewhere) */
+.menu-link:hover {
+  opacity: 0.7;
+}
+
+/* GREEN PILL BUTTON */
 .pill {
-  background: #52a447;
-  color: #001f0a;
-  padding: 0.3rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
+  background-color: #52a447;
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: white !important;
 }
 
-/* make submenu links clear */
-.card a { color: #ffffff; opacity: 0.9; }
+/* SUBMENU */
+.submenu {
+  position: absolute;
+  top: 2.4rem;
+  left: 0;
+  background-color: #121212;
+  padding: 10px 0;
+  border: 1px solid #1e1e1e;
+  border-radius: 6px;
+  min-width: 190px;
+}
 
-/* ensure submenu stays above */
-.group:hover .group-hover\:block { display: block; }
+.submenu li {
+  list-style: none;
+}
 
-/* small responsive tweak */
-@media (max-width: 768px) {
-  .container { padding: 0 0.75rem; }
+.submenu-link {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
+  font-size: 0.95rem;
+}
+
+.submenu-link:hover {
+  background-color: #1f1f1f;
+}
+
+/* PAGE CONTENT */
+.page-content {
+  padding-top: 1rem;
 }
