@@ -1,14 +1,11 @@
-import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "@/app/components/Navbar";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
+      <body>
         <Navbar />
-        <main className="container min-h-screen">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
