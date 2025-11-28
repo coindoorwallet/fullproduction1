@@ -1,4 +1,11 @@
-import Navbar from "@/app/components/Navbar";
+import "./globals.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+export const metadata = {
+  title: "CoinDoor",
+  description: "Your gateway to Web3",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -6,6 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
