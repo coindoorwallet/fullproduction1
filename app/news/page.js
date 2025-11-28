@@ -1,17 +1,26 @@
 async function getNews() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/news`,
-      { cache: "no-store" }
-    );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/news`, {
+    next: { revalidate: 60 },
+  });
 
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.items || [];
-  } catch (_) {
-    return [];
-  }
+  if (!res.ok) return [];
+
+  const data = await res.json();
+  return data.results || data.items || [];
 }
+
+// Map cryptopanic source IDs to readable names
+const SOURCE_MAP = {
+  cointelegraph: "CoinTelegraph",
+  decrypt: "Decrypt",
+  coindesk: "CoinDesk",
+  theblock: "The Block",
+  watcher_guru: "Watcher Guru",
+  bitcoinist: "Bitcoinist",
+  fxstreet: "FXStreet",
+  newsbtc: "NewsBTC",
+  beincrypto: "BeInCrypto",
+};
 
 export default async function NewsPage() {
   const articles = await getNews();
@@ -24,29 +33,40 @@ export default async function NewsPage() {
         <p className="text-neutral-400">No news available right now.</p>
       )}
 
-      <div className="space-y-6">
-        {articles.map((item) => (
-          <a
-            key={item.id}
-            href={item.url}
-            target="_blank"
-            className="block p-5 rounded-lg border border-neutral-800 bg-neutral-950 hover:bg-neutral-900 transition"
-          >
-            <p className="text-sm text-neutral-400 mb-2">
-              {item.source?.title || "Unknown source"} •{" "}
-              {new Date(item.published_at).toLocaleString()}
-            </p>
+      <ul className="space-y-5">
+        {articles.map((item) => {
+          const sourceName =
+            SOURCE_MAP[item.source_id] || "Crypto News";
 
-            <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
+          return (
+            <li
+              key={item.id}
+              className="border border-neutral-800 p-4 rounded-lg hover:bg-neutral-900 transition flex gap-4"
+            >
+              {/* Fallback Image */}
+              <img
+                src="/news-placeholder.jpg"
+                alt="news"
+                className="w-28 h-20 object-cover rounded"
+              />
 
-            {item.domain && (
-              <span className="text-xs px-3 py-1 rounded-full bg-neutral-800 text-neutral-300">
-                {item.domain}
-              </span>
-            )}
-          </a>
-        ))}
-      </div>
+              <div>
+                <a
+                  href={item.url}
+                  target="_blank"
+                  className="font-semibold text-lg text-blue-400 hover:underline"
+                >
+                  {item.title}
+                </a>
+
+                <p className="text-neutral-500 text-sm mt-1">
+                  Source: {sourceName}
+                </p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </main>
   );
 }
