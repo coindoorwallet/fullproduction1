@@ -1,97 +1,122 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(null);
 
   const menuItems = [
-    { title: "Home", href: "/" },
-    { title: "Markets", href: "/markets" },
+    { name: "Home", href: "/" },
+    { name: "Markets", href: "/markets" },
     {
-      title: "News",
+      name: "News",
       submenu: [
-        { title: "Articles", href: "/news/articles" },
-        { title: "Research", href: "/news/research" },
-        { title: "Social Media Commentary", href: "/news/social" },
+        { name: "Articles", href: "/news" },
+        { name: "Research", href: "/news/research" },
+        { name: "Social Media Commentary", href: "/news/social" },
       ],
     },
     {
-      title: "Community",
+      name: "Community",
       submenu: [
-        { title: "Newsletter", href: "/community/newsletter" },
-        { title: "Podcast", href: "/community/podcast" },
+        { name: "Newsletter", href: "/community/newsletter" },
+        { name: "Podcast", href: "/community/podcast" },
       ],
     },
     {
-      title: "Company",
+      name: "Company",
       submenu: [
-        { title: "About", href: "/company/about" },
-        { title: "Partners", href: "/company/partners" },
-        { title: "Become a Partner", href: "/company/become-partner" },
-        { title: "Join Our Team", href: "/company/careers" },
-        { title: "Contact Us", href: "/company/contact" },
+        { name: "About", href: "/company/about" },
+        { name: "Partners", href: "/company/partners" },
+        { name: "Become a Partner", href: "/company/become-partner" },
+        { name: "Join Our Team", href: "/company/join" },
+        { name: "Contact Us", href: "/company/contact" },
       ],
     },
+    { name: "Merchandise", href: "/merch" },
   ];
 
   return (
-    <nav className="w-full bg-black border-b border-[#1d1d1d] px-8 py-3 flex items-center">
-      {/* LEFT — BIGGER LOGO */}
-      <Link href="/" className="flex items-center mr-10">
-        <Image
-          src="/logo.png"
-          alt="CoinDoor Logo"
-          width={65}     // bigger
-          height={65}    // bigger
-          className="object-contain"
-        />
-      </Link>
+    <nav
+      className="w-full sticky top-0 z-50"
+      style={{ backgroundColor: "#0D0D0D", padding: "14px 0" }}
+    >
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6">
+        
+        {/* LOGO */}
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="CoinDoor Logo"
+            width={70}
+            height={70}
+            className="cursor-pointer"
+            style={{ width: "70px", height: "auto" }} 
+          />
+        </Link>
 
-      {/* RIGHT — NAV LINKS */}
-      <div className="flex-grow flex justify-between items-center">
-        <div className="flex gap-10">
+        {/* NAV LINKS */}
+        <div className="flex items-center space-x-10">
           {menuItems.map((item, index) => (
             <div
               key={index}
               className="relative"
-              onMouseEnter={() => setOpenMenu(item.title)}
+              onMouseEnter={() => setOpenMenu(index)}
               onMouseLeave={() => setOpenMenu(null)}
             >
-              <Link
-                href={item.href || "#"}
-                className="text-[#52a447] font-medium hover:opacity-90 transition"
-              >
-                {item.title}
-              </Link>
+              {!item.submenu ? (
+                <Link
+                  href={item.href}
+                  className="font-medium text-[17px]"
+                  style={{ color: "#52A447" }}
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <span
+                  className="font-medium text-[17px] cursor-pointer"
+                  style={{ color: "#52A447" }}
+                >
+                  {item.name}
+                </span>
+              )}
 
               {/* SUBMENU */}
-              {item.submenu && openMenu === item.title && (
-                <div className="absolute left-0 top-full mt-2 bg-[#101010] border border-[#1d1d1d] rounded-lg shadow-lg py-2 w-56 z-50">
-                  {item.submenu.map((sub, i) => (
+              {item.submenu && openMenu === index && (
+                <div
+                  className="absolute left-0 mt-3 w-56 rounded-md shadow-md py-2"
+                  style={{ backgroundColor: "#1A1A1A", border: "1px solid #333" }}
+                >
+                  {item.submenu.map((sub, idx) => (
                     <Link
-                      key={i}
+                      key={idx}
                       href={sub.href}
-                      className="block px-4 py-2 text-sm text-[#52a447] hover:bg-[#1b1b1b] transition"
+                      className="block px-4 py-2 text-sm hover:bg-[#111]"
+                      style={{ color: "#EAEAEA" }}
                     >
-                      {sub.title}
+                      {sub.name}
                     </Link>
                   ))}
                 </div>
               )}
             </div>
           ))}
-        </div>
 
-        {/* EDUCATOR PROGRAM PILL */}
-        <Link
-          href="/educators"
-          className="ml-6 px-4 py-2 rounded-full bg-[#52a447] text-black font-semibold hover:bg-[#44903a] transition"
-        >
-          Educator Program
-        </Link>
+          {/* EDUCATOR PROGRAM PILL */}
+          <Link
+            href="/educator-program"
+            className="px-4 py-2 rounded-full text-sm font-semibold"
+            style={{
+              backgroundColor: "#52A447",
+              color: "white",
+              marginLeft: "10px",
+            }}
+          >
+            Educator Program
+          </Link>
+        </div>
       </div>
     </nav>
   );
