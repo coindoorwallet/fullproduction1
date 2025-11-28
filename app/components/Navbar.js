@@ -1,137 +1,116 @@
 "use client";
-
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
-/**
- * Navbar
- * - Assumes this file lives at app/components/Navbar.js
- * - Uses pure CSS hover + group so submenus remain visible when cursor goes over submenu
- * - Logo bigger and reserved space so menu doesn't touch it
- * - Center nav takes available width and spreads items
- * - "Educator Program" is styled as green pill #52a447
- */
-
-const NAV_ITEMS = [
-  { key: "home", label: "Home", href: "/" },
-  { key: "markets", label: "Markets", href: "/markets" },
-  {
-    key: "news",
-    label: "News",
-    href: "/news",
-    submenu: [
-      { label: "Articles", href: "/news/articles" },
-      { label: "Research", href: "/news/research" },
-      { label: "Social Media Commentary", href: "/news/social" },
-    ],
-  },
-  {
-    key: "community",
-    label: "Community",
-    href: "/community",
-    submenu: [
-      { label: "Newsletter", href: "/community/newsletter" },
-      { label: "Podcast", href: "/community/podcast" },
-    ],
-  },
-  {
-    key: "company",
-    label: "Company",
-    href: "/company",
-    submenu: [
-      { label: "About", href: "/about" },
-      { label: "Partners", href: "/company/partners" },
-      { label: "Become a Partner", href: "/company/become-a-partner" },
-      { label: "Join Our Team", href: "/company/careers" },
-      { label: "Contact Us", href: "/company/contact" },
-    ],
-  },
-  { key: "merch", label: "Merchandise", href: "/merch" },
-];
-
 export default function Navbar() {
-  // small state to control mobile or focused opening if necessary later
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
+
+  const handleHover = (menu) => {
+    setOpenMenu(menu);
+  };
+
+  const handleLeave = () => {
+    setOpenMenu(null);
+  };
 
   return (
-    <header className="border-b border-neutral-800 py-4 bg-black">
-      <div className="container flex items-center">
-        {/* Logo block: fixed width so menu can spread without hitting logo */}
-        <div className="flex items-center mr-6" style={{ minWidth: 140 }}>
-          <Link href="/">
-            <a className="flex items-center gap-3">
-              {/* Make logo noticeably larger */}
-              <img
-                src="/logo.png"
-                alt="CoinDoor"
-                style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 10 }}
-              />
-              {/* label removed intentionally (per your request) */}
-            </a>
-          </Link>
-        </div>
+    <nav className="w-full bg-[#0c0c0c] border-b border-[#1a1a1a]">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+        
+        {/* LOGO — bigger + visible */}
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="CoinDoor Logo"
+            width={65}
+            height={65}
+            className="object-contain cursor-pointer"
+          />
+        </Link>
 
-        {/* Center nav: flex-1 so it expands, items spread across available width */}
-        <nav className="flex-1">
-          <ul className="flex items-center justify-between gap-4">
-            {NAV_ITEMS.map((item) => {
-              const hasSub = !!item.submenu;
-              return (
-                <li key={item.key} className="relative group">
-                  {/* main link/button */}
-                  <Link href={item.href}>
-                    <a
-                      className={`px-3 py-2 inline-block font-semibold ${
-                        item.key === "educator" ? "pill" : ""
-                      }`}
-                      style={{
-                        color: "#52a447", // force green titles per request
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  </Link>
+        {/* NAV LINKS */}
+        <ul className="flex items-center space-x-10 text-[#52a447] font-medium text-sm">
+          
+          <li><Link href="/">Home</Link></li>
 
-                  {/* submenu (if any). It's inside the same parent (.group) so hovering the submenu keeps it visible) */}
-                  {hasSub && (
-                    <div className="absolute left-0 mt-2 w-56 z-50 hidden group-hover:block">
-                      <div className="card p-2">
-                        <ul>
-                          {item.submenu.map((s) => (
-                            <li key={s.href}>
-                              <Link href={s.href}>
-                                <a className="block px-3 py-2 rounded hover:bg-neutral-900">{s.label}</a>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
+          <li><Link href="/markets">Markets</Link></li>
 
-            {/* Educator Program as pill to the far right of nav (if you want it separated visually) */}
-            <li>
-              <Link href="/educator-program">
-                <a
-                  className="px-4 py-2 rounded-full font-semibold"
-                  style={{
-                    background: "#52a447",
-                    color: "#001f0a",
-                  }}
-                >
-                  Educator Program
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
+          {/* NEWS DROPDOWN */}
+          <li
+            className="relative"
+            onMouseEnter={() => handleHover("news")}
+            onMouseLeave={handleLeave}
+          >
+            <span className="cursor-pointer">News</span>
+            {openMenu === "news" && (
+              <div className="absolute top-6 left-0 bg-black border border-[#1f1f1f] rounded-md py-2 w-48 shadow-xl z-50">
+                <Link className="dropdown-item" href="/news">Articles</Link>
+                <Link className="dropdown-item" href="/news/research">Research</Link>
+                <Link className="dropdown-item" href="/news/social">Social Media Commentary</Link>
+              </div>
+            )}
+          </li>
 
-        {/* optional right space for icons / login (keeps navbar balanced) */}
-        <div style={{ minWidth: 140 }} />
+          {/* COMMUNITY DROPDOWN */}
+          <li
+            className="relative"
+            onMouseEnter={() => handleHover("community")}
+            onMouseLeave={handleLeave}
+          >
+            <span className="cursor-pointer">Community</span>
+            {openMenu === "community" && (
+              <div className="absolute top-6 left-0 bg-black border border-[#1f1f1f] rounded-md py-2 w-48 shadow-xl z-50">
+                <Link className="dropdown-item" href="/community/newsletter">Newsletter</Link>
+                <Link className="dropdown-item" href="/community/podcast">Podcast</Link>
+              </div>
+            )}
+          </li>
+
+          {/* COMPANY DROPDOWN */}
+          <li
+            className="relative"
+            onMouseEnter={() => handleHover("company")}
+            onMouseLeave={handleLeave}
+          >
+            <span className="cursor-pointer">Company</span>
+            {openMenu === "company" && (
+              <div className="absolute top-6 left-0 bg-black border border-[#1f1f1f] rounded-md py-2 w-48 shadow-xl">
+                <Link className="dropdown-item" href="/company/about">About</Link>
+                <Link className="dropdown-item" href="/company/partners">Partners</Link>
+                <Link className="dropdown-item" href="/company/become-a-partner">Become a Partner</Link>
+                <Link className="dropdown-item" href="/company/careers">Join Our Team</Link>
+                <Link className="dropdown-item" href="/company/contact">Contact Us</Link>
+              </div>
+            )}
+          </li>
+
+          <li><Link href="/merch">Merchandise</Link></li>
+
+          {/* EDUCATOR PROGRAM — green pill */}
+          <li>
+            <Link
+              href="/educator-program"
+              className="px-4 py-2 rounded-full bg-[#52a447] text-black font-semibold hover:opacity-90 transition"
+            >
+              Educator Program
+            </Link>
+          </li>
+
+        </ul>
       </div>
-    </header>
+
+      <style jsx>{`
+        .dropdown-item {
+          display: block;
+          padding: 8px 12px;
+          color: #eaeaea;
+          font-size: 13px;
+        }
+        .dropdown-item:hover {
+          background: #111;
+        }
+      `}</style>
+    </nav>
   );
 }
