@@ -1,123 +1,137 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 
-export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState(null);
+/**
+ * Navbar
+ * - Assumes this file lives at app/components/Navbar.js
+ * - Uses pure CSS hover + group so submenus remain visible when cursor goes over submenu
+ * - Logo bigger and reserved space so menu doesn't touch it
+ * - Center nav takes available width and spreads items
+ * - "Educator Program" is styled as green pill #52a447
+ */
 
-  const menuItems = [
-    { name: "Home", href: "/" },
-    { name: "Markets", href: "/markets" },
-    {
-      name: "News",
-      submenu: [
-        { name: "Articles", href: "/news" },
-        { name: "Research", href: "/news/research" },
-        { name: "Social Media Commentary", href: "/news/social" },
-      ],
-    },
-    {
-      name: "Community",
-      submenu: [
-        { name: "Newsletter", href: "/community/newsletter" },
-        { name: "Podcast", href: "/community/podcast" },
-      ],
-    },
-    {
-      name: "Company",
-      submenu: [
-        { name: "About", href: "/company/about" },
-        { name: "Partners", href: "/company/partners" },
-        { name: "Become a Partner", href: "/company/become-partner" },
-        { name: "Join Our Team", href: "/company/join" },
-        { name: "Contact Us", href: "/company/contact" },
-      ],
-    },
-    { name: "Merchandise", href: "/merch" },
-  ];
+const NAV_ITEMS = [
+  { key: "home", label: "Home", href: "/" },
+  { key: "markets", label: "Markets", href: "/markets" },
+  {
+    key: "news",
+    label: "News",
+    href: "/news",
+    submenu: [
+      { label: "Articles", href: "/news/articles" },
+      { label: "Research", href: "/news/research" },
+      { label: "Social Media Commentary", href: "/news/social" },
+    ],
+  },
+  {
+    key: "community",
+    label: "Community",
+    href: "/community",
+    submenu: [
+      { label: "Newsletter", href: "/community/newsletter" },
+      { label: "Podcast", href: "/community/podcast" },
+    ],
+  },
+  {
+    key: "company",
+    label: "Company",
+    href: "/company",
+    submenu: [
+      { label: "About", href: "/about" },
+      { label: "Partners", href: "/company/partners" },
+      { label: "Become a Partner", href: "/company/become-a-partner" },
+      { label: "Join Our Team", href: "/company/careers" },
+      { label: "Contact Us", href: "/company/contact" },
+    ],
+  },
+  { key: "merch", label: "Merchandise", href: "/merch" },
+];
+
+export default function Navbar() {
+  // small state to control mobile or focused opening if necessary later
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav
-      className="w-full sticky top-0 z-50"
-      style={{ backgroundColor: "#0D0D0D", padding: "14px 0" }}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6">
-        
-        {/* LOGO */}
-        <Link href="/">
-          <Image
-            src="/logo.png"
-            alt="CoinDoor Logo"
-            width={70}
-            height={70}
-            className="cursor-pointer"
-            style={{ width: "70px", height: "auto" }} 
-          />
-        </Link>
-
-        {/* NAV LINKS */}
-        <div className="flex items-center space-x-10">
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className="relative"
-              onMouseEnter={() => setOpenMenu(index)}
-              onMouseLeave={() => setOpenMenu(null)}
-            >
-              {!item.submenu ? (
-                <Link
-                  href={item.href}
-                  className="font-medium text-[17px]"
-                  style={{ color: "#52A447" }}
-                >
-                  {item.name}
-                </Link>
-              ) : (
-                <span
-                  className="font-medium text-[17px] cursor-pointer"
-                  style={{ color: "#52A447" }}
-                >
-                  {item.name}
-                </span>
-              )}
-
-              {/* SUBMENU */}
-              {item.submenu && openMenu === index && (
-                <div
-                  className="absolute left-0 mt-3 w-56 rounded-md shadow-md py-2"
-                  style={{ backgroundColor: "#1A1A1A", border: "1px solid #333" }}
-                >
-                  {item.submenu.map((sub, idx) => (
-                    <Link
-                      key={idx}
-                      href={sub.href}
-                      className="block px-4 py-2 text-sm hover:bg-[#111]"
-                      style={{ color: "#EAEAEA" }}
-                    >
-                      {sub.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-
-          {/* EDUCATOR PROGRAM PILL */}
-          <Link
-            href="/educator-program"
-            className="px-4 py-2 rounded-full text-sm font-semibold"
-            style={{
-              backgroundColor: "#52A447",
-              color: "white",
-              marginLeft: "10px",
-            }}
-          >
-            Educator Program
+    <header className="border-b border-neutral-800 py-4 bg-black">
+      <div className="container flex items-center">
+        {/* Logo block: fixed width so menu can spread without hitting logo */}
+        <div className="flex items-center mr-6" style={{ minWidth: 140 }}>
+          <Link href="/">
+            <a className="flex items-center gap-3">
+              {/* Make logo noticeably larger */}
+              <img
+                src="/logo.png"
+                alt="CoinDoor"
+                style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 10 }}
+              />
+              {/* label removed intentionally (per your request) */}
+            </a>
           </Link>
         </div>
+
+        {/* Center nav: flex-1 so it expands, items spread across available width */}
+        <nav className="flex-1">
+          <ul className="flex items-center justify-between gap-4">
+            {NAV_ITEMS.map((item) => {
+              const hasSub = !!item.submenu;
+              return (
+                <li key={item.key} className="relative group">
+                  {/* main link/button */}
+                  <Link href={item.href}>
+                    <a
+                      className={`px-3 py-2 inline-block font-semibold ${
+                        item.key === "educator" ? "pill" : ""
+                      }`}
+                      style={{
+                        color: "#52a447", // force green titles per request
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  </Link>
+
+                  {/* submenu (if any). It's inside the same parent (.group) so hovering the submenu keeps it visible) */}
+                  {hasSub && (
+                    <div className="absolute left-0 mt-2 w-56 z-50 hidden group-hover:block">
+                      <div className="card p-2">
+                        <ul>
+                          {item.submenu.map((s) => (
+                            <li key={s.href}>
+                              <Link href={s.href}>
+                                <a className="block px-3 py-2 rounded hover:bg-neutral-900">{s.label}</a>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+
+            {/* Educator Program as pill to the far right of nav (if you want it separated visually) */}
+            <li>
+              <Link href="/educator-program">
+                <a
+                  className="px-4 py-2 rounded-full font-semibold"
+                  style={{
+                    background: "#52a447",
+                    color: "#001f0a",
+                  }}
+                >
+                  Educator Program
+                </a>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* optional right space for icons / login (keeps navbar balanced) */}
+        <div style={{ minWidth: 140 }} />
       </div>
-    </nav>
+    </header>
   );
 }
