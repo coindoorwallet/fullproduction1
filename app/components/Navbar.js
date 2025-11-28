@@ -7,85 +7,59 @@ import Image from "next/image";
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(null);
 
+  const menuItems = {
+    News: ["Articles", "Research", "Social Media Commentary"],
+    Community: ["Newsletter", "Podcast"],
+    Company: ["About", "Partners", "Become a Partner", "Join Our Team", "Contact Us"],
+  };
+
   return (
-    <nav className="w-full bg-black text-white border-b border-[#1A1A1A] px-6 py-4 flex items-center justify-between">
+    <nav className="w-full bg-black border-b border-[#1f1f1f] px-8 py-4 flex items-center justify-between sticky top-0 z-50">
+      
       {/* LOGO */}
-      <Link href="/" className="flex items-center gap-3">
+      <Link href="/" className="flex items-center space-x-2">
         <Image
           src="/logo.png"
-          width={42}         // bigger logo
-          height={42}
+          width={52}       // bigger
+          height={52}      // bigger
           alt="CoinDoor Logo"
-          className="object-contain"
         />
       </Link>
 
-      {/* NAV LINKS */}
-      <div className="flex items-center gap-8 relative">
+      {/* MENU */}
+      <div className="flex space-x-8 text-green-500 font-semibold text-lg">
         
-        {/* HOME */}
-        <Link href="/" className="hover:text-[#00ff7f] transition">Home</Link>
+        <Link href="/">Home</Link>
+        <Link href="/markets">Markets</Link>
 
-        {/* MARKETS */}
-        <Link href="/markets" className="hover:text-[#00ff7f] transition">Markets</Link>
+        {/* DROPDOWN GROUPS */}
+        {["News", "Community", "Company"].map((section) => (
+          <div
+            key={section}
+            className="relative"
+            onMouseEnter={() => setOpenMenu(section)}
+            onMouseLeave={() => setOpenMenu(null)}
+          >
+            <span className="cursor-pointer">{section}</span>
 
-        {/* NEWS (dropdown) */}
-        <div
-          className="relative"
-          onMouseEnter={() => setOpenMenu("news")}
-          onMouseLeave={() => setOpenMenu(null)}
-        >
-          <span className="cursor-pointer hover:text-[#00ff7f]">News</span>
+            {openMenu === section && (
+              <div className="absolute top-full left-0 mt-2 w-56 bg-black border border-[#1f1f1f] rounded-lg shadow-lg py-2">
+                {menuItems[section].map((item) => (
+                  <Link
+                    key={item}
+                    href={`/${section.toLowerCase()}/${item.toLowerCase().replace(/ /g, "-")}`}
+                    className="block px-4 py-2 text-green-500 hover:bg-[#111]"
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
 
-          {openMenu === "news" && (
-            <div className="absolute top-full left-0 bg-[#111] border border-[#222] rounded-md shadow-lg py-2 w-56">
-              <Link href="/news" className="block px-4 py-2 hover:bg-[#1d1d1d]">Articles</Link>
-              <Link href="/news/research" className="block px-4 py-2 hover:bg-[#1d1d1d]">Research</Link>
-              <Link href="/news/social" className="block px-4 py-2 hover:bg-[#1d1d1d]">Social Media Commentary</Link>
-            </div>
-          )}
-        </div>
-
-        {/* COMMUNITY (dropdown) */}
-        <div
-          className="relative"
-          onMouseEnter={() => setOpenMenu("community")}
-          onMouseLeave={() => setOpenMenu(null)}
-        >
-          <span className="cursor-pointer hover:text-[#00ff7f]">Community</span>
-
-          {openMenu === "community" && (
-            <div className="absolute top-full left-0 bg-[#111] border border-[#222] rounded-md shadow-lg py-2 w-56">
-              <Link href="/community/newsletter" className="block px-4 py-2 hover:bg-[#1d1d1d]">Newsletter</Link>
-              <Link href="/community/podcast" className="block px-4 py-2 hover:bg-[#1d1d1d]">Podcast</Link>
-            </div>
-          )}
-        </div>
-
-        {/* COMPANY (dropdown) */}
-        <div
-          className="relative"
-          onMouseEnter={() => setOpenMenu("company")}
-          onMouseLeave={() => setOpenMenu(null)}
-        >
-          <span className="cursor-pointer hover:text-[#00ff7f]">Company</span>
-
-          {openMenu === "company" && (
-            <div className="absolute top-full left-0 bg-[#111] border border-[#222] rounded-md shadow-lg py-2 w-56">
-              <Link href="/company/about" className="block px-4 py-2 hover:bg-[#1d1d1d]">About</Link>
-              <Link href="/company/partners" className="block px-4 py-2 hover:bg-[#1d1d1d]">Partners</Link>
-              <Link href="/company/become-partner" className="block px-4 py-2 hover:bg-[#1d1d1d]">Become a Partner</Link>
-              <Link href="/company/careers" className="block px-4 py-2 hover:bg-[#1d1d1d]">Join Our Team</Link>
-              <Link href="/company/contact" className="block px-4 py-2 hover:bg-[#1d1d1d]">Contact Us</Link>
-            </div>
-          )}
-        </div>
-
-        {/* MERCH */}
-        <Link href="/merch" className="hover:text-[#00ff7f] transition">Merchandise</Link>
-
-        {/* EDUCATOR PROGRAM */}
-        <Link href="/educators" className="hover:text-[#00ff7f] transition">Educator Program</Link>
+        <Link href="/merchandise">Merchandise</Link>
+        <Link href="/educator-program">Educator Program</Link>
       </div>
     </nav>
   );
