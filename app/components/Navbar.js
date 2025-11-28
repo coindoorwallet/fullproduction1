@@ -1,100 +1,102 @@
 "use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(null);
 
+  const linkClasses =
+    "text-[#52a447] font-semibold hover:text-white transition";
+
   const menuItems = [
-    { title: "Home", href: "/" },
-    { title: "Markets", href: "/markets" },
+    { name: "Home", href: "/" },
+    { name: "Markets", href: "/markets" },
     {
-      title: "News",
+      name: "News",
       children: [
-        { title: "Articles", href: "/news/articles" },
-        { title: "Research", href: "/news/research" },
-        { title: "Social Media Commentary", href: "/news/social" },
+        { name: "Articles", href: "/news/articles" },
+        { name: "Research", href: "/news/research" },
+        { name: "Social Media Commentary", href: "/news/social" },
       ],
     },
     {
-      title: "Community",
+      name: "Community",
       children: [
-        { title: "Newsletter", href: "/community/newsletter" },
-        { title: "Podcast", href: "/community/podcast" },
+        { name: "Newsletter", href: "/community/newsletter" },
+        { name: "Podcast", href: "/community/podcast" },
       ],
     },
     {
-      title: "Company",
+      name: "Company",
       children: [
-        { title: "About", href: "/company/about" },
-        { title: "Partners", href: "/company/partners" },
-        { title: "Become a Partner", href: "/company/become-partner" },
-        { title: "Join Our Team", href: "/company/careers" },
-        { title: "Contact Us", href: "/company/contact" },
+        { name: "About", href: "/company/about" },
+        { name: "Partners", href: "/company/partners" },
+        { name: "Become a Partner", href: "/company/become-partner" },
+        { name: "Join Our Team", href: "/company/careers" },
+        { name: "Contact Us", href: "/company/contact" },
       ],
     },
-    {
-      title: "Merchandise",
-      href: "/merch",
-    },
-    {
-      title: "Educator Program",
-      href: "/educator",
-      pill: true,
-    },
+    { name: "Merchandise", href: "/merch" },
   ];
 
   return (
-    <nav className="w-full bg-[#0c0f0d] border-b border-[#1d251c]">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        
-        {/* LOGO — increased size */}
-        <Link href="/">
-          <img
-            src="/logo.png"
-            alt="CoinDoor Logo"
-            className="h-14 w-auto cursor-pointer"
-          />
-        </Link>
+    <nav className="w-full bg-black flex items-center justify-between px-10 py-4 shadow-lg sticky top-0 z-50">
+      {/* LOGO */}
+      <div className="flex items-center gap-3">
+        <Image
+          src="/logo.png"
+          alt="CoinDoor Logo"
+          width={55}
+          height={55}
+          className="object-contain"
+        />
+      </div>
 
-        {/* MENU */}
-        <ul className="flex items-center space-x-10">
-          {menuItems.map((item, i) => (
-            <li
-              key={i}
-              className="relative"
-              onMouseEnter={() => setOpenMenu(item.title)}
-              onMouseLeave={() => setOpenMenu(null)}
-            >
-              {/* Main title */}
-              <Link
-                href={item.href || "#"}
-                className={`text-white hover:text-[#52a447] transition ${
-                  item.pill
-                    ? "bg-[#52a447] text-black px-4 py-2 rounded-full font-medium ml-4"
-                    : "text-[#52a447]"
-                }`}
-              >
-                {item.title}
+      {/* MENU */}
+      <div className="flex gap-10 items-center">
+        {menuItems.map((item, index) => (
+          <div
+            key={index}
+            className="relative"
+            onMouseEnter={() => setOpenMenu(item.name)}
+            onMouseLeave={() => setOpenMenu(null)}
+          >
+            {!item.children ? (
+              <Link href={item.href} className={linkClasses}>
+                {item.name}
               </Link>
+            ) : (
+              <span className={linkClasses + " cursor-pointer"}>
+                {item.name}
+              </span>
+            )}
 
-              {/* Submenu */}
-              {item.children && openMenu === item.title && (
-                <div className="absolute left-0 mt-3 bg-[#111712] border border-[#1d251c] rounded-lg shadow-lg z-30 min-w-[220px]">
-                  {item.children.map((child, j) => (
-                    <Link
-                      key={j}
-                      href={child.href}
-                      className="block px-4 py-3 text-white hover:bg-[#1a2219] hover:text-[#52a447]"
-                    >
-                      {child.title}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+            {/* DROPDOWN */}
+            {item.children && openMenu === item.name && (
+              <div className="absolute left-0 mt-2 bg-black border border-[#52a447] rounded-md shadow-lg w-56">
+                {item.children.map((sub, i) => (
+                  <Link
+                    key={i}
+                    href={sub.href}
+                    className="block px-4 py-2 text-[#52a447] hover:bg-[#52a447] hover:text-black transition"
+                  >
+                    {sub.name}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* EDUCATOR PROGRAM BUTTON */}
+        <Link
+          href="/educator-program"
+          className="px-4 py-2 rounded-full bg-[#52a447] text-black font-bold hover:bg-white hover:text-black transition"
+        >
+          Educator Program
+        </Link>
       </div>
     </nav>
   );
