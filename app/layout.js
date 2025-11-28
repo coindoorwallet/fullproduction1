@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 
 export const metadata = {
   title: "CoinDoor",
-  description: "Crypto education, markets & insights.",
+  description: "Crypto Markets, News & Research",
 };
 
 export default function RootLayout({ children }) {
@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Navbar />
-        {children}
+        <div className="page-content">{children}</div>
       </body>
     </html>
   );
