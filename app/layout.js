@@ -3,8 +3,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 export const metadata = {
-  title: "CoinDoor",
-  description: "Live crypto charts, market insights & education signup.",
+  title: "CoinDoor — Real-time crypto charts & trusted Web3 news",
+  description: "CoinDoor — live charts, curated Web3 news and educator program signups.",
 };
 
 export default function RootLayout({ children }) {
@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-black text-white">
         <Navbar />
-        <main className="min-h-screen">{children}</main>
+        <main className="container min-h-screen py-8">{children}</main>
         <Footer />
       </body>
     </html>
