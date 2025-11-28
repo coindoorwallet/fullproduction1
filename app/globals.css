@@ -40,3 +40,31 @@ a { color: var(--accent); text-decoration: none; }
   font-weight:600;
   font-size:0.9rem;
 }
+/* Dropdown transitions */
+[role="menu"] {
+  transform-origin: top right;
+  transition: opacity 160ms ease, transform 160ms ease;
+  z-index: 50;
+}
+
+/* Panel background variable used above */
+:root {
+  --panel: #0b0b0b;
+  --accent: #52a447;
+  --accent-foreground: #001f0a;
+}
+
+/* Improve link hover readability */
+.header-link {
+  color: rgba(255,255,255,0.9);
+  padding: 0 .125rem;
+}
+
+.header-link:hover {
+  opacity: 0.95;
+}
+
+/* Mobile menu */
+@media (max-width: 767px) {
+  header .container { padding-left: 1rem; padding-right: 1rem; }
+}
