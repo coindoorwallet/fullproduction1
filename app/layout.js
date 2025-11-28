@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 export const metadata = {
   title: "CoinDoor",
-  description: "Your Web3 learning & market intelligence hub.",
+  description: "Real-time crypto markets, research, news & education.",
 };
 
 export default function RootLayout({ children }) {
