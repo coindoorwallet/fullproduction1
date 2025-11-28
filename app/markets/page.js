@@ -1,34 +1,33 @@
-"use client";
-
 import Link from "next/link";
-import CoinCard from "../components/CoinCard";
 
-const COINS = [
-  { id: "bitcoin", symbol: "BTC", tv: "BINANCE:BTCUSDT", name: "Bitcoin", logo: "/logos/btc.png" },
-  { id: "ethereum", symbol: "ETH", tv: "BINANCE:ETHUSDT", name: "Ethereum", logo: "/logos/eth.png" },
-  { id: "solana", symbol: "SOL", tv: "BINANCE:SOLUSDT", name: "Solana", logo: "/logos/sol.png" },
-  { id: "ripple", symbol: "XRP", tv: "BINANCE:XRPUSDT", name: "XRP", logo: "/logos/xrp.png" },
-  { id: "cardano", symbol: "ADA", tv: "BINANCE:ADAUSDT", name: "Cardano", logo: "/logos/ada.png" },
-  { id: "avalanche-2", symbol: "AVAX", tv: "BINANCE:AVAXUSDT", name: "Avalanche", logo: "/logos/avax.png" },
-  { id: "polkadot", symbol: "DOT", tv: "BINANCE:DOTUSDT", name: "Polkadot", logo: "/logos/dot.png" },
-  { id: "binancecoin", symbol: "BNB", tv: "BINANCE:BNBUSDT", name: "BNB", logo: "/logos/bnb.png" },
+const coins = [
+  { id: "BTCUSDT", name: "Bitcoin (BTC)" },
+  { id: "ETHUSDT", name: "Ethereum (ETH)" },
+  { id: "XRPUSDT", name: "XRP" },
+  { id: "SOLUSDT", name: "Solana (SOL)" },
+  { id: "ADAUSDT", name: "Cardano (ADA)" },
+  { id: "AVAXUSDT", name: "Avalanche (AVAX)" },
+  { id: "DOTUSDT", name: "Polkadot (DOT)" },
+  { id: "BNBUSDT", name: "BNB" },
 ];
 
 export default function MarketsPage() {
   return (
-    <main>
-      <h1 className="text-3xl font-bold mb-4">Markets</h1>
-      <p className="small-muted mb-6">Interactive charts — click a coin for its full chart and details.</p>
+    <main className="p-10 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Markets</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {COINS.map(c => (
-          <Link key={c.id} href={`/coins/${c.id}`}>
-            <a>
-              <CoinCard coin={c} />
-            </a>
-          </Link>
+      <ul className="space-y-4">
+        {coins.map((coin) => (
+          <li key={coin.id}>
+            <Link
+              href={`/markets/${coin.id}`}
+              className="block p-4 border border-neutral-800 rounded hover:bg-neutral-900 transition"
+            >
+              {coin.name}
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </main>
   );
 }
