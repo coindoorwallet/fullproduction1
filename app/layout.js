@@ -1,10 +1,9 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 export const metadata = {
   title: "CoinDoor",
-  description: "Real-time crypto markets, research, news & education.",
+  description: "Market intelligence for modern crypto investors",
 };
 
 export default function RootLayout({ children }) {
@@ -12,8 +11,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-black text-white">
         <Navbar />
-        <main>{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
