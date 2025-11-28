@@ -4,88 +4,99 @@ import Image from "next/image";
 import { useState } from "react";
 
 const menuItems = [
-  { label: "Home", href: "/" },
-  { label: "Markets", href: "/markets" },
+  { title: "Home", href: "/" },
   {
-    label: "News",
+    title: "Markets",
+    href: "/markets",
+  },
+  {
+    title: "News",
     children: [
-      { label: "Articles", href: "/news" },
-      { label: "Research", href: "/research" },
-      { label: "Social Media Commentary", href: "/social" },
+      { title: "Articles", href: "/news/articles" },
+      { title: "Research", href: "/news/research" },
+      { title: "Social Media Commentary", href: "/news/social" },
     ],
   },
   {
-    label: "Community",
+    title: "Community",
     children: [
-      { label: "Newsletter", href: "/newsletter" },
-      { label: "Podcast", href: "/podcast" },
+      { title: "Newsletter", href: "/community/newsletter" },
+      { title: "Podcast", href: "/community/podcast" },
     ],
   },
   {
-    label: "Company",
+    title: "Company",
     children: [
-      { label: "About", href: "/about" },
-      { label: "Partners", href: "/partners" },
-      { label: "Become a Partner", href: "/become-partner" },
-      { label: "Join Our Team", href: "/careers" },
-      { label: "Contact Us", href: "/contact" },
+      { title: "About", href: "/company/about" },
+      { title: "Partners", href: "/company/partners" },
+      { title: "Become a Partner", href: "/company/become-a-partner" },
+      { title: "Join Our Team", href: "/company/jobs" },
+      { title: "Contact Us", href: "/company/contact" },
     ],
   },
-  { label: "Merchandise", href: "/merch" },
-  { label: "Educator Program", href: "/educator" },
+  { title: "Merchandise", href: "/merch" },
+  { title: "Educator Program", href: "/educators" },
 ];
 
 export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState(null);
+  const [active, setActive] = useState(null);
 
   return (
-    <nav className="bg-black text-white shadow-md">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        
-        {/* LOGO — INCREASED SIZE */}
-        <Link href="/">
-          <Image
-            src="/logo.png"
-            alt="CoinDoor Logo"
-            width={160}    // ← BIGGER
-            height={60}
-            className="cursor-pointer"
-          />
-        </Link>
+    <nav className="w-full bg-black border-b border-neutral-800">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
+          
+          {/* LOGO */}
+          <div className="flex-shrink-0">
+            <Link href="/">
+              <Image
+                src="/logo.png"
+                alt="CoinDoor Logo"
+                width={80}     // ← LOGO SIZE BUFFED
+                height={80}
+                className="cursor-pointer"
+              />
+            </Link>
+          </div>
 
-        <ul className="flex space-x-8">
-          {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className="relative"
-              onMouseEnter={() => setOpenMenu(index)}
-              onMouseLeave={() => setOpenMenu(null)}
-            >
-              <Link
-                href={item.href || "#"}
-                className="text-[#52a447] font-semibold hover:text-white transition"
-              >
-                {item.label}
-              </Link>
+          {/* NAV ITEMS */}
+          <div className="flex-grow flex justify-center">
+            <ul className="flex space-x-10">
+              {menuItems.map((item, index) => (
+                <li
+                  key={index}
+                  className="relative"
+                  onMouseEnter={() => setActive(index)}
+                  onMouseLeave={() => setActive(null)}
+                >
+                  <Link
+                    href={item.href || "#"}
+                    className="text-[#52a447] font-medium hover:opacity-80 transition"
+                  >
+                    {item.title}
+                  </Link>
 
-              {/* Dropdown */}
-              {item.children && openMenu === index && (
-                <ul className="absolute left-0 mt-2 bg-black border border-[#52a447] rounded-lg shadow-lg py-2 w-56 z-50">
-                  {item.children.map((child, i) => (
-                    <li key={i}>
-                      <Link
-                        href={child.href}
-                        className="block px-4 py-2 text-white hover:bg-[#52a447] hover:text-black transition"
-                      >
-                        {child.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
+                  {/* DROPDOWN */}
+                  {item.children && active === index && (
+                    <ul className="absolute top-full left-0 bg-black border border-neutral-700 mt-2 rounded-md shadow-lg z-50 w-56">
+                      {item.children.map((child, i) => (
+                        <li key={i} className="border-b border-neutral-800 last:border-none">
+                          <Link
+                            href={child.href}
+                            className="block px-4 py-2 text-sm text-[#52a447] hover:bg-neutral-900"
+                          >
+                            {child.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
       </div>
     </nav>
   );
