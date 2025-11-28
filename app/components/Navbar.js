@@ -1,195 +1,183 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-
-function useOutsideClick(ref, handler) {
-  useEffect(() => {
-    const listener = (e) => {
-      if (!ref.current || ref.current.contains(e.target)) return;
-      handler();
-    };
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
-    return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
-    };
-  }, [ref, handler]);
-}
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 export default function Navbar() {
+  const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState(null); // "news" | "community" | "company" | null
-  const containerRef = useRef(null);
-  useOutsideClick(containerRef, () => {
-    setOpenMenu(null);
-    setMobileOpen(false);
-  });
 
-  const navItems = [
-    { key: "home", label: "Home", href: "/" },
-    { key: "markets", label: "Markets", href: "/markets" },
-    {
-      key: "news",
-      label: "News",
-      submenu: [
-        { label: "Articles", href: "/news/articles" },
-        { label: "Research", href: "/news/research" },
-        { label: "Social Media Commentary", href: "/news/social" },
-      ],
-    },
-    {
-      key: "community",
-      label: "Community",
-      submenu: [
-        { label: "Newsletter", href: "/community/newsletter" },
-        { label: "Podcast", href: "/community/podcast" },
-      ],
-    },
-    {
-      key: "company",
-      label: "Company",
-      submenu: [
-        { label: "About", href: "/about" },
-        { label: "Partners", href: "/company/partners" },
-        { label: "Become a Partner", href: "/company/become-a-partner" },
-        { label: "Join Our Team", href: "/company/join" },
-        { label: "Contact Us", href: "/company/contact" },
-      ],
-    },
-    { key: "merch", label: "Merchandise", href: "/merchandise" },
-    { key: "educator", label: "Educator Program", href: "/educator-program", pill: true },
-  ];
+  const menuItems = {
+    news: [
+      { label: "Articles", href: "/news/articles" },
+      { label: "Research", href: "/news/research" },
+      { label: "Social Media Commentary", href: "/news/social" },
+    ],
+    community: [
+      { label: "Newsletter", href: "/community/newsletter" },
+      { label: "Podcast", href: "/community/podcast" },
+    ],
+    company: [
+      { label: "About", href: "/company/about" },
+      { label: "Partners", href: "/company/partners" },
+      { label: "Become a Partner", href: "/company/become-partner" },
+      { label: "Join Our Team", href: "/company/join-our-team" },
+      { label: "Contact Us", href: "/company/contact" },
+    ],
+  };
 
   return (
-    <header ref={containerRef} className="border-b border-neutral-800">
-      <div className="container flex items-center justify-between py-4">
-        {/* Logo only */}
-        <Link href="/" className="flex items-center">
-          <img src="/logo.png" alt="CoinDoor logo" width="44" height="44" style={{ borderRadius: 8 }} />
+    <nav className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        
+        {/* --- LOGO --- */}
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="CoinDoor Logo"
+            width={120}
+            height={40}
+            className="cursor-pointer"
+            priority
+          />
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => {
-            if (!item.submenu) {
-              return item.pill ? (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className="px-3 py-1 rounded-full bg-[var(--accent)] text-[var(--accent-foreground)] font-semibold"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <Link key={item.key} href={item.href} className="header-link">
-                  {item.label}
-                </Link>
-              );
-            }
+        {/* --- DESKTOP MENU --- */}
+        <div className="hidden md:flex space-x-8 items-center text-white font-medium">
+          <NavItem label="Home" href="/" />
 
-            // item has submenu
-            return (
-              <div
-                key={item.key}
-                className="relative"
-                onMouseEnter={() => setOpenMenu(item.key)}
-                onMouseLeave={() => setOpenMenu((prev) => (prev === item.key ? null : prev))}
-              >
-                <button
-                  onClick={() => setOpenMenu((prev) => (prev === item.key ? null : item.key))}
-                  aria-haspopup="menu"
-                  aria-expanded={openMenu === item.key}
-                  className="header-link flex items-center gap-2"
-                >
-                  {item.label}
-                  <svg className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-                    <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" />
-                  </svg>
-                </button>
+          <NavItem label="Markets" href="/markets" />
 
-                {/* Dropdown */}
-                <div
-                  role="menu"
-                  className={`absolute right-0 mt-3 w-56 rounded-lg border border-neutral-800 bg-[var(--panel)] shadow-lg transition-opacity ${
-                    openMenu === item.key ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                  }`}
-                >
-                  <div className="py-2">
-                    {item.submenu.map((s) => (
-                      <Link
-                        key={s.href}
-                        href={s.href}
-                        className="block px-4 py-2 text-sm hover:bg-neutral-900"
-                        onClick={() => setOpenMenu(null)}
-                      >
-                        {s.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </nav>
+          <DropdownMenu
+            label="News"
+            menu={menuItems.news}
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            id="news"
+          />
 
-        {/* Mobile hamburger */}
-        <div className="md:hidden flex items-center gap-3">
-          <button
-            aria-label="Toggle menu"
-            onClick={() => setMobileOpen((o) => !o)}
-            className="p-2 rounded hover:bg-white/5"
-          >
-            {mobileOpen ? (
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
+          <DropdownMenu
+            label="Community"
+            menu={menuItems.community}
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            id="community"
+          />
+
+          <DropdownMenu
+            label="Company"
+            menu={menuItems.company}
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            id="company"
+          />
+
+          <NavItem label="Merchandise" href="/merch" />
+          <NavItem label="Educator Program" href="/educator-program" />
         </div>
+
+        {/* --- MOBILE BUTTON --- */}
+        <button
+          className="md:hidden text-white"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          ☰
+        </button>
       </div>
 
-      {/* Mobile menu panel */}
-      <div className={`md:hidden border-t border-neutral-800 ${mobileOpen ? "block" : "hidden"}`}>
-        <div className="px-4 py-4 space-y-2">
-          {navItems.map((item) => {
-            if (!item.submenu) {
-              return (
-                <Link key={item.key} href={item.href} className="block px-2 py-2 rounded hover:bg-neutral-900">
-                  {item.label}
-                </Link>
-              );
-            }
+      {/* --- MOBILE MENU --- */}
+      {mobileOpen && (
+        <div className="md:hidden bg-black/95 text-white px-6 pb-4 space-y-4">
+          <MobileItem label="Home" href="/" />
+          <MobileItem label="Markets" href="/markets" />
 
-            return (
-              <div key={item.key} className="border-t border-neutral-800">
-                <button
-                  onClick={() => setOpenMenu((prev) => (prev === item.key ? null : item.key))}
-                  className="w-full text-left px-2 py-2 flex items-center justify-between"
-                >
-                  {item.label}
-                  <span className="opacity-70">{openMenu === item.key ? "−" : "+"}</span>
-                </button>
+          <MobileDropdown label="News" items={menuItems.news} />
+          <MobileDropdown label="Community" items={menuItems.community} />
+          <MobileDropdown label="Company" items={menuItems.company} />
 
-                {openMenu === item.key && (
-                  <div className="pl-4">
-                    {item.submenu.map((s) => (
-                      <Link key={s.href} href={s.href} className="block px-2 py-2 text-sm hover:bg-neutral-900">
-                        {s.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <MobileItem label="Merchandise" href="/merch" />
+          <MobileItem label="Educator Program" href="/educator-program" />
         </div>
-      </div>
-    </header>
+      )}
+    </nav>
+  );
+}
+
+/* ---------------------------------------------------------------------- */
+/* COMPONENTS */
+/* ---------------------------------------------------------------------- */
+
+function NavItem({ label, href }) {
+  return (
+    <Link href={href} className="hover:text-gray-300 transition">
+      {label}
+    </Link>
+  );
+}
+
+function DropdownMenu({ label, menu, openMenu, setOpenMenu, id }) {
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpenMenu(id)}
+      onMouseLeave={() => setOpenMenu(null)}
+    >
+      <button className="flex items-center gap-1 hover:text-gray-300 transition">
+        {label}
+        <ChevronDown size={16} />
+      </button>
+
+      {openMenu === id && (
+        <div className="absolute left-0 mt-3 w-56 bg-black border border-white/10 rounded-xl shadow-xl py-3 z-50"
+             onMouseEnter={() => setOpenMenu(id)}
+             onMouseLeave={() => setOpenMenu(null)}
+        >
+          {menu.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="block px-4 py-2 text-sm hover:bg-white/10 transition"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileItem({ label, href }) {
+  return (
+    <Link href={href} className="block">
+      {label}
+    </Link>
+  );
+}
+
+function MobileDropdown({ label, items }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        className="w-full text-left flex items-center justify-between"
+        onClick={() => setOpen(!open)}
+      >
+        {label} <ChevronDown size={16} />
+      </button>
+
+      {open && (
+        <div className="ml-4 mt-2 space-y-2">
+          {items.map((i) => (
+            <Link key={i.label} href={i.href} className="block text-sm">
+              {i.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
