@@ -3,50 +3,63 @@
 import { useEffect, useState } from "react";
 
 export default function Ticker() {
-  const [prices, setPrices] = useState([]);
+  const [prices, setPrices] = useState({});
 
-  async function fetchPrices() {
-    try {
-      const res = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,ripple,cardano,avalanche,polkadot,binancecoin&vs_currencies=usd&include_24hr_change=true"
-      );
-      const data = await res.json();
+  const symbols = ["BTC", "ETH", "XRP", "SOL", "BNB", "AVAX"];
 
-      const formatted = Object.keys(data).map((coin) => ({
-        name: coin.toUpperCase(),
-        price: data[coin].usd,
-        change: data[coin].usd_24h_change,
-      }));
-
-      setPrices(formatted);
-    } catch (e) {
-      console.error("Ticker fetch failed", e);
-    }
-  }
-
+  // Fetch prices from CoinGecko
   useEffect(() => {
-    fetchPrices();
-    const interval = setInterval(fetchPrices, 5000);
+    async function loadPrices() {
+      try {
+        const res = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,binancecoin,avalanche-2&vs_currencies=usd"
+        );
+        const data = await res.json();
+
+        setPrices({
+          BTC: data.bitcoin.usd,
+          ETH: data.ethereum.usd,
+          XRP: data.ripple.usd,
+          SOL: data.solana.usd,
+          BNB: data.binancecoin.usd,
+          AVAX: data["avalanche-2"].usd,
+        });
+      } catch (e) {}
+    }
+
+    loadPrices();
+    const interval = setInterval(loadPrices, 30000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-full bg-black overflow-hidden border-t border-b border-[#52a447]">
-      <div className="ticker flex whitespace-nowrap animate-ticker py-2">
-        {prices.map((c, i) => (
-          <div key={i} className="mx-10 flex items-center gap-3">
-            <span className="text-white font-semibold">{c.name}</span>
-            <span className="text-white">${c.price.toLocaleString()}</span>
-            <span
-              className={
-                c.change >= 0 ? "text-green-400" : "text-red-400"
-              }
-            >
-              {c.change.toFixed(2)}%
+    <div className="w-full bg-black border-t border-b border-white/10 overflow-hidden whitespace-nowrap">
+      <div className="flex gap-12 animate-marquee py-3 px-6 text-sm">
+        {symbols.map((sym) => (
+          <div
+            key={sym}
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+          >
+            <span className="font-semibold">{sym}:</span>
+            <span className="text-green-400">
+              {prices[sym] ? `$${prices[sym]}` : "..."}
             </span>
           </div>
         ))}
       </div>
+
+      {/* Animation keyframes */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+          display: inline-flex;
+          animation: marquee 25s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
