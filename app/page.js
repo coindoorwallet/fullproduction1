@@ -1,19 +1,59 @@
+"use client";
+
+import Navbar from "@/components/Navbar";
+import Ticker from "@/components/Ticker";
+import Hero from "@/components/Hero";
+import TopCoins from "@/components/TopCoins";
+import TopNews from "@/components/TopNews";
+import EducatorProgram from "@/components/EducatorProgram";
+import CommunityShowcase from "@/components/CommunityShowcase";
+import Spotlight from "@/components/Spotlight";
+import JoinOurTeam from "@/components/JoinOurTeam";
+import Footer from "@/components/Footer";
+
 export default function Home() {
   return (
-    <section className="mt-16 text-center">
-      <div className="max-w-2xl mx-auto">
-        <img src="/logo.png" alt="CoinDoor" width="96" style={{margin:'0 auto', borderRadius:10}}/>
-        <h1 className="text-5xl font-bold mt-6">CoinDoor</h1>
-        <p className="mt-4 text-lg small-muted">
-          Real-time crypto charts, curated Web3 news, and a trusted educator program for schools.
-        </p>
+    <main className="bg-black text-white min-h-screen w-full overflow-x-hidden">
+      <Navbar />
+      <Ticker />
 
-        <div className="flex justify-center gap-4 mt-8">
-          <a href="/markets" className="px-6 py-3 rounded-xl border border-white/10">View Markets</a>
-          <a href="/news" className="px-6 py-3 rounded-xl bg-[var(--accent)] text-[var(--accent-foreground)]">Latest News</a>
-          <a href="/educator-program" className="px-6 py-3 rounded-xl border border-white/10">Educator Program</a>
-        </div>
-      </div>
-    </section>
+      {/* HERO */}
+      <section className="relative">
+        <Hero />
+      </section>
+
+      {/* TOP COINS */}
+      <section className="relative py-20 px-5">
+        <TopCoins />
+      </section>
+
+      {/* TOP NEWS */}
+      <section className="relative py-20 px-5">
+        <TopNews />
+      </section>
+
+      {/* EDUCATOR PROGRAM */}
+      <section className="relative py-20 px-5">
+        <EducatorProgram />
+      </section>
+
+      {/* COMMUNITY */}
+      <section className="relative py-20 px-5">
+        <CommunityShowcase />
+      </section>
+
+      {/* SPOTLIGHT */}
+      <section className="relative py-20 px-5">
+        <Spotlight />
+      </section>
+
+      {/* JOIN OUR TEAM CTA */}
+      <section className="relative py-20 px-5">
+        <JoinOurTeam />
+      </section>
+
+      {/* FOOTER */}
+      <Footer />
+    </main>
   );
 }
