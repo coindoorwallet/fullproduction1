@@ -1,99 +1,102 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
-  const [openMenu, setOpenMenu] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
-  const handleEnter = (menu) => setOpenMenu(menu);
-  const handleLeave = () => setOpenMenu(null);
+  const menuItems = [
+    { title: "Markets", link: "/markets" },
+
+    {
+      title: "News",
+      submenu: [
+        { title: "Articles", link: "/news" },
+        { title: "Research", link: "/research" },
+        { title: "Social Media", link: "/social" },
+      ],
+    },
+
+    {
+      title: "Community",
+      submenu: [
+        { title: "Newsletter", link: "/newsletter" },
+        { title: "Podcast", link: "/podcast" },
+        { title: "Developers Forum", link: "/forum" },
+        { title: "Make a Donation", link: "/donate" },
+        { title: "Satoshi's Secret", link: "/satoshi" },
+      ],
+    },
+
+    {
+      title: "Company",
+      submenu: [
+        { title: "About Us", link: "/about" },
+        { title: "Contact Us", link: "/contact" },
+        { title: "Follow Us", link: "/follow" },
+        { title: "Join our Team", link: "/careers" },
+        { title: "Our Passion", link: "/passion" },
+        { title: "Corporate Profile", link: "/profile" },
+      ],
+    },
+
+    { title: "Merchandise", link: "/merch" },
+  ];
 
   return (
-    <nav className="bg-black text-[#52a447] px-8 py-4 flex items-center justify-between">
-      
-      {/* LOGO */}
-      <div className="flex items-center">
-        <Image
-          src="/logo.png"
-          alt="CoinDoor Logo"
-          width={80}    // ← MAKE LOGO BIGGER
-          height={80}
-          priority
-        />
-      </div>
+    <nav className="w-full fixed top-0 left-0 z-50 bg-transparent backdrop-blur-xl border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* LOGO */}
+        <Link href="/" className="text-xl font-semibold tracking-wide">
+          CoinDoor
+        </Link>
 
-      {/* NAV ITEMS */}
-      <ul className="flex items-center gap-10 text-lg font-medium">
-        
-        <li><a href="/" className="hover:opacity-70">Home</a></li>
-        <li><a href="/markets" className="hover:opacity-70">Markets</a></li>
+        {/* MENU */}
+        <div className="hidden md:flex items-center gap-8">
+          {menuItems.map((item, idx) => (
+            <div
+              key={idx}
+              className="relative"
+              onMouseEnter={() => setOpenDropdown(item.title)}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              {/* Top-level item */}
+              <Link
+                href={item.link ?? "#"}
+                className="hover:text-green-400 transition-colors"
+              >
+                {item.title}
+              </Link>
 
-        {/* NEWS DROPDOWN */}
-        <li
-          className="relative"
-          onMouseEnter={() => handleEnter("news")}
-          onMouseLeave={handleLeave}
-        >
-          <span className="cursor-pointer hover:opacity-70">News</span>
-
-          {openMenu === "news" && (
-            <div className="absolute left-0 top-full bg-black border border-[#52a447] mt-2 py-2 w-56 z-50">
-              <a href="/news/articles" className="block px-4 py-2 hover:bg-[#111]">Articles</a>
-              <a href="/news/research" className="block px-4 py-2 hover:bg-[#111]">Research</a>
-              <a href="/news/social" className="block px-4 py-2 hover:bg-[#111]">Social Media Commentary</a>
+              {/* Submenu */}
+              {item.submenu && openDropdown === item.title && (
+                <div className="absolute left-0 top-full mt-2 bg-[#0d0d0d] border border-white/10 rounded-lg shadow-xl p-4 min-w-[200px]">
+                  <div className="flex flex-col gap-3">
+                    {item.submenu.map((sub, sidx) => (
+                      <Link
+                        key={sidx}
+                        href={sub.link}
+                        className="text-sm hover:text-green-400 transition-colors"
+                      >
+                        {sub.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </li>
+          ))}
 
-        {/* COMMUNITY DROPDOWN */}
-        <li
-          className="relative"
-          onMouseEnter={() => handleEnter("community")}
-          onMouseLeave={handleLeave}
-        >
-          <span className="cursor-pointer hover:opacity-70">Community</span>
-
-          {openMenu === "community" && (
-            <div className="absolute left-0 top-full bg-black border border-[#52a447] mt-2 py-2 w-56 z-50">
-              <a href="/community/newsletter" className="block px-4 py-2 hover:bg-[#111]">Newsletter</a>
-              <a href="/community/podcast" className="block px-4 py-2 hover:bg-[#111]">Podcast</a>
-            </div>
-          )}
-        </li>
-
-        {/* COMPANY DROPDOWN */}
-        <li
-          className="relative"
-          onMouseEnter={() => handleEnter("company")}
-          onMouseLeave={handleLeave}
-        >
-          <span className="cursor-pointer hover:opacity-70">Company</span>
-
-          {openMenu === "company" && (
-            <div className="absolute left-0 top-full bg-black border border-[#52a447] mt-2 py-2 w-56 z-50">
-              <a href="/company/about" className="block px-4 py-2 hover:bg-[#111]">About</a>
-              <a href="/company/partners" className="block px-4 py-2 hover:bg-[#111]">Partners</a>
-              <a href="/company/become-a-partner" className="block px-4 py-2 hover:bg-[#111]">Become a Partner</a>
-              <a href="/company/join-our-team" className="block px-4 py-2 hover:bg-[#111]">Join Our Team</a>
-              <a href="/company/contact" className="block px-4 py-2 hover:bg-[#111]">Contact Us</a>
-            </div>
-          )}
-        </li>
-
-        <li><a href="/merch" className="hover:opacity-70">Merchandise</a></li>
-
-        {/* EDUCATOR PROGRAM (GREEN PILL) */}
-        <li>
-          <a 
+          {/* EDUCATOR PROGRAM BUTTON */}
+          <Link
             href="/educator-program"
-            className="bg-[#52a447] text-black px-5 py-2 rounded-full font-semibold hover:bg-[#44903c]"
+            className="px-4 py-2 rounded-full bg-green-500 text-black font-semibold hover:bg-green-400 transition-all"
           >
             Educator Program
-          </a>
-        </li>
-
-      </ul>
+          </Link>
+        </div>
+      </div>
     </nav>
   );
 }
