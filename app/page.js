@@ -1,56 +1,47 @@
-"use client";
-
 import Navbar from "@/components/Navbar";
 import Ticker from "@/components/Ticker";
 import Hero from "@/components/Hero";
 import TopCoins from "@/components/TopCoins";
 import TopNews from "@/components/TopNews";
 import EducatorProgram from "@/components/EducatorProgram";
-import CommunityShowcase from "@/components/CommunityShowcase";
+import CommunitySection from "@/components/CommunitySection";
+import ResearchSection from "@/components/ResearchSection";
 import Spotlight from "@/components/Spotlight";
-import JoinOurTeam from "@/components/JoinOurTeam";
+import JoinTeam from "@/components/JoinTeam";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="bg-black text-white min-h-screen w-full overflow-x-hidden">
+    <main className="w-full min-h-screen bg-black text-white flex flex-col items-center">
+      {/* NAVIGATION */}
       <Navbar />
+
+      {/* TICKER */}
       <Ticker />
 
       {/* HERO */}
-      <section className="relative">
-        <Hero />
-      </section>
+      <Hero />
 
       {/* TOP COINS */}
-      <section className="relative py-20 px-5">
-        <TopCoins />
-      </section>
+      <TopCoins />
 
       {/* TOP NEWS */}
-      <section className="relative py-20 px-5">
-        <TopNews />
-      </section>
+      <TopNews />
 
       {/* EDUCATOR PROGRAM */}
-      <section className="relative py-20 px-5">
-        <EducatorProgram />
-      </section>
+      <EducatorProgram />
 
       {/* COMMUNITY */}
-      <section className="relative py-20 px-5">
-        <CommunityShowcase />
-      </section>
+      <CommunitySection />
 
-      {/* SPOTLIGHT */}
-      <section className="relative py-20 px-5">
-        <Spotlight />
-      </section>
+      {/* RESEARCH */}
+      <ResearchSection />
 
-      {/* JOIN OUR TEAM CTA */}
-      <section className="relative py-20 px-5">
-        <JoinOurTeam />
-      </section>
+      {/* HUMPHREY'S SPOTLIGHT */}
+      <Spotlight />
+
+      {/* JOIN OUR TEAM */}
+      <JoinTeam />
 
       {/* FOOTER */}
       <Footer />
